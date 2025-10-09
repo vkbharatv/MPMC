@@ -2,48 +2,54 @@
  * Author: Dr Bharat Verma
  * Email: bharat.verma@lnmiit.ac.in
  * Date: 2025-10-09
- * Description: Timer0-based 1 ms delay example for 8052/8051 family.
- *              Change the FOSC macro to match your hardware oscillator.
+ * Description: Timer0-based 1 ms delay example for 8052/8051 family with stepper motor control.
+ *              Change the FOSC macro in delay.h to match your hardware oscillator.
  */
 
-#include <reg52.h>
+#include <reg52.h> // Standard 8051/8052 register definitions; ensure your toolchain provides this file
+#include "delay.h" // Provides delay1ms(unsigned int ms) for millisecond delays using Timer0; set FOSC macro in delay.h to match your hardware
 
-// Example: generate a 1 millisecond delay using Timer0 (16-bit mode)
-// Default assumption: 12 MHz crystal oscillator (classic 8051 uses 12 clocks per machine cycle)
-// Adjust FOSC if your board uses a different crystal.
+sbit LED = P1 ^ 0;
 
-#define FOSC 12000000UL /* oscillator frequency in Hz (change if needed) */
+#define STEPPER_PORT P2		   // Use P2 port for stepper control
+#define STEP_DELAY 100		   // Step delay in milliseconds to control speed
+#define NUM_STEPS 4			   	 // Number of steps in the sequence
 
-sbit LED = P1 ^ 0; // example output pin to observe the delay (toggle)
+// Stepper motor step sequence for full step (two adjacent phases on at a time)
+// Each value represents the port pattern for one step
+code unsigned char stepper_sequence[NUM_STEPS] = {
+	0x03, // 0011 - First and second coils active (P2.0 = 1, P2.1 = 1)
+	0x06, // 0110 - Second and third coils active (P2.1 = 1, P2.2 = 1)
+	0x0C, // 1100 - Third and fourth coils active (P2.2 = 1, P2.3 = 1)
+	0x09  // 1001 - Fourth and first coils active (P2.3 = 1, P2.0 = 1)
+};
 
-// delay1ms: delays approximately 1 millisecond using Timer0
-// Formula: ticks_per_ms = (FOSC / 12) / 1000
-// preload = 65536 - ticks_per_ms
-void delay1ms(void)
-{
-	unsigned long ticks_per_ms = (FOSC / 12UL) / 1000UL;
-	unsigned int reload = (unsigned int)(65536UL - ticks_per_ms);
-
-	// Configure Timer0 mode1 (16-bit) while preserving timer1 bits
-	TMOD = (TMOD & 0xF0) | 0x01;
-
-	TH0 = (unsigned char)(reload >> 8);
-	TL0 = (unsigned char)(reload & 0xFF);
-
-	TF0 = 0; // clear overflow flag
-	TR0 = 1; // start Timer0
-	while (!TF0)
-		;	 // wait until timer overflows
-	TR0 = 0; // stop Timer0
-	TF0 = 0; // clear flag for next use
-}
+void stepper_steps(unsigned int steps);
 
 void main(void)
 {
 	LED = 0;
+	STEPPER_PORT = 0x00; // Initialize stepper motor to off state
 	while (1)
 	{
-		LED = !LED; // toggle LED (or logic on P1.0)
-		delay1ms();
+		LED = !LED; // Toggle LED to indicate operation
+		stepper_steps(250);
+	}
+}
+
+void stepper_steps(unsigned int steps)
+{
+	static unsigned char step_index = 0;
+	unsigned int i;
+	for (i = 0; i < steps; i++)
+	{
+		STEPPER_PORT = stepper_sequence[step_index];
+
+		step_index++;
+		if (step_index >= NUM_STEPS)
+		{
+			step_index = 0; // Wrap around to the beginning of the sequence
+			delay(STEP_DELAY);
+		}
 	}
 }
