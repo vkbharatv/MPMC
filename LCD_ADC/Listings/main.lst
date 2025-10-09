@@ -1,0 +1,88 @@
+C51 COMPILER V9.60.7.0   MAIN                                                              10/03/2025 22:50:58 PAGE 1   
+
+
+C51 COMPILER V9.60.7.0, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN .\Objects\main.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE main.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\main
+                    -.lst) TABS(2) OBJECT(.\Objects\main.obj)
+
+line level    source
+
+   1          #include<reg51.h>
+   2          #include"lcd.h"
+   3          #include<stdio.h>
+   4          //#include<string.h>
+   5          #define adc_port P1
+   6          sbit rd = P0^3;
+   7          sbit wr = P0^4;
+   8          sbit intr =P0^5;
+   9          
+  10          
+  11          unsigned int read_adc();
+  12          
+  13          
+  14          
+  15          void main()
+  16          {
+  17   1          int adc_value;
+  18   1          float V;
+  19   1          float buffer[10];
+  20   1      
+  21   1          // Set ADC data bus as input and control pins as output/input
+  22   1          adc_port = 0xFF; // Set P2 as an input port
+  23   1          intr = 1;            // Set INTR pin as input
+  24   1          wr = 1;
+  25   1          rd = 1;
+  26   1      
+  27   1          lcd_init();          // Initialize the LCD
+  28   1          while(1)
+  29   1          {
+  30   2              adc_value = read_adc();      // Read the digital value from ADC
+  31   2              V = ((float)adc_value*5/255);
+  32   2              sprintf(buffer, "Voltage= %0.5f", V);
+*** WARNING C182 IN LINE 32 OF main.c: pointer to different objects
+  33   2              lcd_gotoxy(0, 0);            // Move cursor to the second line
+  34   2              lcd_string(buffer);    // Display the value on LCD
+*** WARNING C182 IN LINE 34 OF main.c: pointer to different objects
+  35   2              delay_ms(10);               // Wait before the next reading
+  36   2              lcd_gotoxy(1,0);
+  37   2              sprintf(buffer,"Raw = %d", adc_value);
+*** WARNING C182 IN LINE 37 OF main.c: pointer to different objects
+  38   2              lcd_string(buffer);
+*** WARNING C182 IN LINE 38 OF main.c: pointer to different objects
+  39   2            
+  40   2          }
+  41   1      }
+  42          
+  43          unsigned int read_adc()
+  44          {
+  45   1          int value;
+  46   1          wr = 0;              // 2. Send a low pulse to WR to start conversion
+  47   1          delay_ms(1);
+  48   1          wr = 1;
+  49   1      
+  50   1          while(intr == 1);    // 3. Wait for the conversion to complete (INTR goes low)
+C51 COMPILER V9.60.7.0   MAIN                                                              10/03/2025 22:50:58 PAGE 2   
+
+  51   1      
+  52   1          rd = 0;              // 4. Pull RD low to read the data
+  53   1          delay_ms(1);
+  54   1          value = adc_port;     // 5. Read the 8-bit data from the bus
+  55   1          rd = 1;              // 6. Pull RD high to finish the read cycle
+  56   1          
+  57   1          return value;
+  58   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    412    ----
+   CONSTANT SIZE    =     26    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----      55
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  4 WARNING(S),  0 ERROR(S)
