@@ -1,0 +1,34 @@
+# Ignore build outputs and object files
+build/
+Objects/
+Listings/
+Project Backups/
+
+# Hex, map, obj, list, logs
+*.hex
+*.lnp
+*.map
+*.obj
+*.lst
+*.log
+*.hex
+
+# IDE / project files (uVision, ProDev)
+*.uvproj*
+*.uvopt
+*.pdsprj
+*.uvgui.*
+*.workspace
+
+# Temporary / user files
+*.autosave
+*.swp
+*.tmp
+*.bak
+
+# OneDrive / OS
+Thumbs.db
+.DS_Store
+
+
+
