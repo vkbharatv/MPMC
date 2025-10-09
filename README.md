@@ -1,4 +1,4 @@
-# MPMC
+# 8051/52 Microcontroller
 
 MPMC contains compact example projects and C source code for experiments with 8051/8052 microcontrollers (Keil uVision projects).
 
