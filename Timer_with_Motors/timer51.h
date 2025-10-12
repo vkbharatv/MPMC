@@ -9,7 +9,8 @@
  *	Example: generate a 1 millisecond delay using Timer0 (16-bit mode)
  *	Default assumption: 12 MHz crystal oscillator (classic 8051 uses 12 clocks per machine cycle)
  */
-
+ 
+ 
 #define FOSC 12000000UL /* oscillator frequency in Hz (change if needed) */
 
 void delay1ms(void)
@@ -33,11 +34,39 @@ void delay1ms(void)
 	TR0 = 0; // stop Timer0
 	TF0 = 0; // clear flag for next use
 }
+void delayT(unsigned int ms)
+{
+    // Assumes FOSC is defined globally, e.g., #define FOSC 12000000UL
+    // Calculate total ticks needed for the given ms
+    unsigned long ticks = ((FOSC / 12UL) * ms) / 1000UL;
+		unsigned int reload;
+    // Check if ticks fit in 16-bit timer
+    if (ticks > 65535UL)
+        return; // Or handle error: delay too long for single timer cycle
 
-void delay(unsigned int ms)
+    // Calculate reload value
+    reload = 65536UL - ticks;
+
+    // Configure Timer0 in mode 1 (16-bit)
+    TMOD = (TMOD & 0xF0) | 0x01;
+
+    TH0 = (unsigned char)(reload >> 8);
+    TL0 = (unsigned char)(reload & 0xFF);
+
+    TF0 = 0; // Clear overflow flag
+    TR0 = 1; // Start Timer0
+
+    while (!TF0)
+        ; // Wait for overflow
+
+    TR0 = 0; // Stop Timer0
+    TF0 = 0; // Clear flag
+}
+
+void delay(unsigned int d)
 {
 	unsigned int i;
-	for (i = 0; i < ms; i++)
+	for(i=0;i<d;i++)
 	{
 		delay1ms();
 	}
@@ -72,3 +101,4 @@ void delay_us(unsigned int us)
 		delay1us();
 	}
 }
+
