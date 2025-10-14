@@ -12,6 +12,8 @@ Project Backups/
 *.lst
 *.log
 *.hex
+*.json
+*.lock
 
 # IDE / project files (uVision, ProDev)
 *.uvproj*
