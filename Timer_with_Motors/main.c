@@ -53,3 +53,10 @@ void stepper_steps(unsigned int steps)
 		delay(STEP_DELAY);
 	}
 }
+
+/*
+ * 1. Write a program to blink an LED at 5Hz connected at PIN1.0 when a stepper mottor completes 180 degree rotations.
+ * 2. Write a program to rotate stepper motor 90 degree when a switch is pressed one time.
+ * 3. Write a program to rotate a stepper motor 180 degree when a switch connected to PIN1.0 and -180 degree when another switch connected to PIN1.2 is pressed.
+ * 4. Write a program to rotate stepper motor at clockwise when one switch is pressed and anti-clockwise when another switch is pressed. Also toggle an LED when motor shaft completes the 45 degree angle.
+ */
