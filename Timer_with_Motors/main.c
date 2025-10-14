@@ -33,7 +33,6 @@ void main(void)
 	while (1)
 	{
 		LED = !LED; // Toggle LED to indicate operation
-		// for(j=0;j<STEP_DELAY;j++) {delay(50);}
 		stepper_steps(90);
 	}
 }
