@@ -3,11 +3,11 @@
  * Email: bharat.verma@lnmiit.ac.in
  * Date: 2025-10-09
  * Description: Timer0-based 1 ms delay example for 8052/8051 family with stepper motor control.
- *              Change the FOSC macro in delay.h to match your hardware oscillator.
+ *              Change the FOSC macro in timer51.h to match your hardware oscillator.
  */
 
 #include <reg52.h>	 // Standard 8051/8052 register definitions; ensure your toolchain provides this file
-#include "timer51.h" // Provides delay1ms(unsigned int ms) for millisecond delays using Timer0; set FOSC macro in delay.h to match your hardware
+#include "timer51.h" // Provides delay1ms(unsigned int ms) for millisecond delays using Timer0; set FOSC macro in timer51.h to match your hardware
 
 sbit LED = P1 ^ 0;
 
