@@ -6,14 +6,14 @@
  *              Change the FOSC macro in delay.h to match your hardware oscillator.
  */
 
-#include <reg52.h> // Standard 8051/8052 register definitions; ensure your toolchain provides this file
+#include <reg52.h>	 // Standard 8051/8052 register definitions; ensure your toolchain provides this file
 #include "timer51.h" // Provides delay1ms(unsigned int ms) for millisecond delays using Timer0; set FOSC macro in delay.h to match your hardware
 
 sbit LED = P1 ^ 0;
 
-#define STEPPER_PORT P2		   // Use P2 port for stepper control
-#define STEP_DELAY 50   // Step delay in milliseconds to control speed
-#define NUM_STEPS 4			   	 // Number of steps in the sequence
+#define STEPPER_PORT P2 // Use P2 port for stepper control
+#define STEP_DELAY 50	// Step delay in milliseconds to control speed
+#define NUM_STEPS 4		// Number of steps in the sequence
 
 // Stepper motor step sequence for full step (two adjacent phases on at a time)
 // Each value represents the port pattern for one step
@@ -33,7 +33,7 @@ void main(void)
 	while (1)
 	{
 		LED = !LED; // Toggle LED to indicate operation
-		//for(j=0;j<STEP_DELAY;j++) {delay(50);}
+		// for(j=0;j<STEP_DELAY;j++) {delay(50);}
 		stepper_steps(90);
 	}
 }
@@ -52,6 +52,5 @@ void stepper_steps(unsigned int steps)
 			step_index = 0; // Wrap around to the beginning of the sequence
 		}
 		delay(STEP_DELAY);
-
 	}
 }
