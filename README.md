@@ -9,5 +9,6 @@ Repository structure (high level):
 - `LCD_ADC/` — LCD examples and ADC interfacing (Keil project files and sources)
 - `Seven_seg/` — Seven-segment display demos and project files
 - `Timer_with_Motors/` — Timer-based motor control examples
+- `interrupt8051/` - 8051/52 interrupts explanation with an example.
 
 Feel free to open any folder to see the code and Keil project settings for each experiment.
