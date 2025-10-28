@@ -3,7 +3,7 @@ sbit led = P1 ^ 0;
 
 #define PWM_PERIOD 10             // number of timer ticks per PWM cycle
 #define DUTY_STEP 1               // step size when changing duty via INT0/INT1
-volatile unsigned char duty = 50; // duty (0..PWM_PERIOD)
+volatile unsigned char duty = 5;  // duty (0..PWM_PERIOD)
 volatile unsigned char pwm_cnt = 0;
 
 void timer0_isr(void) interrupt 1
