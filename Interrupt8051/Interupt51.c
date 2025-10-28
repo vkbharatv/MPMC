@@ -72,7 +72,7 @@ void main(void)
 
     EA = 1; // enable global interrupts
 
-    // Set a reasonable PWM frequency for LED dimming (e.g. 200 Hz)
+    // Set a reasonable PWM frequency for LED dimming (e.g. 1000 Hz)
     // Adjust the value as needed for your application/hardware
     set_pwm_frequency(1000UL);
 
